@@ -25,7 +25,14 @@ class WelcomePage extends StatelessWidget {
           ),
           Hero(
               tag: "tag",
-              child: Image.asset('Assets/brainboostlogo.png', width: 300)),
+              child: TweenAnimationBuilder(
+                duration: const Duration(seconds: 1),
+                tween: Tween<double>(begin: 0,end: 1),
+                builder: (BuildContext context, dynamic value, Widget? child) {
+                  return Opacity(opacity: value,
+                  child: Image.asset('Assets/brainboostlogo.png', width: 300),);
+                },
+              ),),
           Container(
             decoration: const BoxDecoration(
                 color: Colors.black,
@@ -35,15 +42,21 @@ class WelcomePage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                AnimatedContainer(
-                  duration: Duration(seconds: 10),
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
-                    "Empowering educators and students on the journey to unlock their full academic potential.",
-                    style:
-                        GoogleFonts.roboto(color: Colors.white, fontSize: 19),
-                  ),
-                ),
+                TweenAnimationBuilder(
+                  duration: const Duration(seconds: 1),
+                  tween: Tween<double>(begin: 0,end: 1),
+                  builder: (BuildContext context, dynamic value, Widget? child) {
+                    return Opacity(opacity: value,
+                    child: Container(
+                    margin: EdgeInsets.only(right: 20,left: value * 20),
+                    child: Text(
+                      "Empowering educators and students on the journey to unlock their full academic potential.",
+                      style:
+                          GoogleFonts.roboto(color: Colors.white, fontSize: 19),
+                    ),
+                  ),);
+                  },
+                ),              
                 const SizedBox(
                   height: 50,
                 ),
