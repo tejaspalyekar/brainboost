@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "583444395533",
+    "project_id": "brainboost-9363b",
+    "storage_bucket": "brainboost-9363b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:583444395533:android:21860de7e31ed23935c744",
+        "android_client_info": {
+          "package_name": "com.example.brainboost"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQp908LMmyZnv_wi25q9bVrzEFI2g2-jE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

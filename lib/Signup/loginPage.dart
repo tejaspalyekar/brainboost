@@ -1,35 +1,70 @@
+import 'dart:async';
 import 'package:brainboost/ReuseableWidgets/ReuseableButton.dart';
 import 'package:brainboost/ReuseableWidgets/ReuseableTextinputField.dart';
 import 'package:brainboost/ReuseableWidgets/ReuseableTopContainer.dart';
+import 'package:brainboost/Signup/passwordReset.dart';
+import 'package:brainboost/StudentUI/screens/dashboard.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginPage extends StatelessWidget {
- LoginPage({super.key});
+  LoginPage({super.key});
+
+  final auth = FirebaseAuth.instance;
   TextEditingController inputEmail = TextEditingController();
   TextEditingController inpuutPassword = TextEditingController();
+
+  UserLogin(BuildContext context) async {
+    await auth
+        .signInWithEmailAndPassword(
+            email: inputEmail.text.trim(), password: inpuutPassword.text.trim())
+        .then((value) {
+      Navigator.of(context).push(DialogRoute(
+          context: context, builder: (context) => const Dashboard()));
+
+      Fluttertoast.showToast(
+          msg: "Sign in Sucessfull!",
+          backgroundColor: Colors.black,
+          fontSize: 16,
+          toastLength: Toast.LENGTH_SHORT,
+          textColor: Colors.white);
+    }).onError((error, stackTrace) {
+      Fluttertoast.showToast(
+          msg: error.toString(),
+          backgroundColor: Colors.black,
+          fontSize: 16,
+          toastLength: Toast.LENGTH_SHORT,
+          textColor: Colors.white);
+      Navigator.of(context).pop();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          ReuseableTopContainer(
-              title1: "Welcome",
-              title2: "Back!",
-              fun: () {
-                Navigator.of(context).pop();
-              }),
-          Expanded(
-            child: Container(
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            ReuseableTopContainer(
+                title1: "Welcome",
+                title2: "Back!",
+                fun: () {
+                  Navigator.of(context).pop();
+                }),
+            Container(
               padding: const EdgeInsets.only(
                 left: 30,
                 right: 30,
+                top: 100
               ),
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ReuseableTextInputField(
-                      inputController: inputEmail,
+                        inputController: inputEmail,
                         hide: false,
                         label: "Email Address",
                         hint: "enter email address"),
@@ -37,8 +72,10 @@ class LoginPage extends StatelessWidget {
                       height: 30,
                     ),
                     ReuseableTextInputField(
-                      inputController: inpuutPassword,
-                        hide: true, label: "Password", hint: "enter password"),
+                        inputController: inpuutPassword,
+                        hide: true,
+                        label: "Password",
+                        hint: "enter password"),
                     const SizedBox(
                       height: 50,
                     ),
@@ -46,7 +83,19 @@ class LoginPage extends StatelessWidget {
                       width: double.infinity,
                       height: 50,
                       child: ReuseableButton(
-                          fun: () {},
+                          fun: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(
+                                      color: Colors.black,
+                                      backgroundColor: Colors.yellow,
+                                    ),
+                                  );
+                                });
+                            UserLogin(context);
+                          },
                           btncolor: Colors.yellow,
                           btntitle: "Sign in"),
                     ),
@@ -56,16 +105,20 @@ class LoginPage extends StatelessWidget {
                     SizedBox(
                         width: double.infinity,
                         child: GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.of(context).push(PageRouteBuilder(
+                                  pageBuilder: (context, __, ___) =>
+                                      PasswordReset()));
+                            },
                             child: const Text(
                               "Forgot Password?",
                               style: TextStyle(fontSize: 16),
                               textAlign: TextAlign.right,
                             )))
                   ]),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

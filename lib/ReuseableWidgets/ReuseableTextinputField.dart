@@ -23,7 +23,7 @@ class _ReuseableTextInputFieldState extends State<ReuseableTextInputField> {
             borderRadius: BorderRadius.circular(20),
           ),
           suffixIcon:
-              widget.label == "Password" || widget.label == "Confirm Password"
+              widget.label == "Confirm Password" || widget.label == "Create Password"
                   ? GestureDetector(
                       onTap: () {
                         setState(() {

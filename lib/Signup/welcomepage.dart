@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:brainboost/ReuseableWidgets/ReuseableButton.dart';
 import 'package:brainboost/Signup/loginPage.dart';
 import 'package:brainboost/Signup/signuppage.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class WelcomePage extends StatelessWidget {
+  WelcomePage({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +35,8 @@ class WelcomePage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Container(
+                AnimatedContainer(
+                  duration: Duration(seconds: 10),
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
                     "Empowering educators and students on the journey to unlock their full academic potential.",
@@ -51,10 +55,13 @@ class WelcomePage extends StatelessWidget {
                         Navigator.push(
                             context,
                             PageRouteBuilder(
-                               reverseTransitionDuration: const Duration(milliseconds: 200),
-                              opaque: true,
+                               
+                                reverseTransitionDuration:
+                                    const Duration(milliseconds: 200),
+                                opaque: true,
                                 pageBuilder: (context, __, ___) =>
-                                    SignupPage()));
+                                    SignupPage(
+                                    )));
                       },
                       btncolor: Colors.yellow,
                       btntitle: "Sign Up"),
@@ -67,7 +74,8 @@ class WelcomePage extends StatelessWidget {
                     Navigator.of(context).push(PageRouteBuilder(
                         reverseTransitionDuration: Duration(milliseconds: 200),
                         opaque: true,
-                        pageBuilder: (context, __, ___) => LoginPage()));
+                        pageBuilder: (context, __, ___) => LoginPage(
+                        )));
                   },
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,

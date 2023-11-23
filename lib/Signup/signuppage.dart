@@ -2,22 +2,118 @@ import 'package:brainboost/ReuseableWidgets/ReuseableButton.dart';
 import 'package:brainboost/ReuseableWidgets/ReuseableTextinputField.dart';
 import 'package:brainboost/ReuseableWidgets/ReuseableTopContainer.dart';
 import 'package:brainboost/Signup/loginPage.dart';
+import 'package:brainboost/Signup/verifyEmail.dart';
+import 'package:brainboost/StudentUI/screens/dashboard.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 
 class SignupPage extends StatelessWidget {
   SignupPage({super.key});
+  final auth = FirebaseAuth.instance;
+  late final Rx<User?> firebaseUser;
   TextEditingController name = TextEditingController();
-  TextEditingController email = TextEditingController();
+  TextEditingController inputemail = TextEditingController();
   TextEditingController phoneno = TextEditingController();
-  TextEditingController password = TextEditingController();
+  TextEditingController inputpassword = TextEditingController();
   TextEditingController confirmpassword = TextEditingController();
 
-  validatePassword() {
-    if (password.text == confirmpassword.text) {
-      print(password.text);
+  bool validatefields() {
+    String password = inputpassword.text.trim();
+    String confirmpass = confirmpassword.text.trim();
+    if (password == confirmpass) {
+      if (password.length >= 6) {
+        if (password.contains('@') ||
+            password.contains('#') ||
+            password.contains('!') ||
+            password.contains('%') ||
+            password.contains('&') ||
+            password.contains('*') ||
+            password.contains('(') ||
+            password.contains('^') ||
+            password.contains(')')) {
+          if (password.contains(RegExp(r'[A-Z]'))) {
+            if (inputemail.text.isEmail) {
+              if (phoneno.text.trim().length == 10 &&
+                  phoneno.text.trim().isNumericOnly) {
+                return true;
+              } else {
+                Fluttertoast.showToast(
+                    msg: "Phone Number invalid",
+                    backgroundColor: Colors.black,
+                    fontSize: 16,
+                    toastLength: Toast.LENGTH_SHORT,
+                    textColor: Colors.white);
+                return false;
+              }
+            } else {
+              Fluttertoast.showToast(
+                  msg: "Email invalid",
+                  backgroundColor: Colors.black,
+                  fontSize: 16,
+                  toastLength: Toast.LENGTH_SHORT,
+                  textColor: Colors.white);
+              return false;
+            }
+          } else {
+            Fluttertoast.showToast(
+                msg: "Password should contain atleast 1 uppercase character",
+                backgroundColor: Colors.black,
+                fontSize: 16,
+                toastLength: Toast.LENGTH_SHORT,
+                textColor: Colors.white);
+            return false;
+          }
+        } else {
+          Fluttertoast.showToast(
+              msg: "Password should contain atleast 1 special characters",
+              backgroundColor: Colors.black,
+              fontSize: 16,
+              toastLength: Toast.LENGTH_SHORT,
+              textColor: Colors.white);
+          return false;
+        }
+      } else {
+        Fluttertoast.showToast(
+            msg: "Password should contain atleast 6 characters",
+            backgroundColor: Colors.black,
+            fontSize: 16,
+            toastLength: Toast.LENGTH_SHORT,
+            textColor: Colors.white);
+        return false;
+      }
     } else {
-      print("password miss match");
+      Fluttertoast.showToast(
+          msg: "Password Missmatch",
+          backgroundColor: Colors.black,
+          fontSize: 16,
+          toastLength: Toast.LENGTH_SHORT,
+          textColor: Colors.white);
+      return false;
     }
+  }
+
+  bool CheckEmptyFields() {
+    String username = name.text;
+    String email = inputemail.text;
+    String mob = phoneno.text;
+    String pass = inputpassword.text;
+    String confirmpass = confirmpassword.text;
+    if (username.isEmpty ||
+        email.isEmpty ||
+        mob.isEmpty ||
+        pass.isEmpty ||
+        confirmpass.isEmpty) {
+      Fluttertoast.showToast(
+          msg: "Fields cannot be empty",
+          backgroundColor: Colors.black,
+          fontSize: 16,
+          toastLength: Toast.LENGTH_SHORT,
+          textColor: Colors.white);
+      return false;
+    }
+    return true;
   }
 
   @override
@@ -46,7 +142,7 @@ class SignupPage extends StatelessWidget {
                     height: 20,
                   ),
                   ReuseableTextInputField(
-                      inputController: email,
+                      inputController: inputemail,
                       hide: false,
                       label: "Email Address",
                       hint: "Enter your email address"),
@@ -62,9 +158,9 @@ class SignupPage extends StatelessWidget {
                     height: 20,
                   ),
                   ReuseableTextInputField(
-                      inputController: password,
+                      inputController: inputpassword,
                       hide: true,
-                      label: "Password",
+                      label: "Create Password",
                       hint: "Create a new password"),
                   const SizedBox(
                     height: 20,
@@ -82,9 +178,34 @@ class SignupPage extends StatelessWidget {
                     height: 50,
                     child: ReuseableButton(
                         fun: () {
-                          print(name.text);
-                          print(email.text);
-                          validatePassword();
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return const Center(
+                                  child: CircularProgressIndicator(
+                                    color: Colors.black,
+                                    backgroundColor: Colors.yellow,
+                                  ),
+                                );
+                              });
+                          if (CheckEmptyFields()) {
+                            if (validatefields() == true) {
+                              Navigator.of(context).push(DialogRoute(
+                                  context: context,
+                                  builder: (context) => ValidateEmailAndMob(
+                                      email: inputemail,
+                                      password: inputpassword,
+                                      changeemail: (){
+                                        Navigator.of(context).pop();
+                                      },)));
+                              
+                            }else{
+                              Navigator.of(context).pop();
+                            }
+                          }else{
+                            Navigator.of(context).pop();
+                          }
+                          
                         },
                         btncolor: Colors.yellow,
                         btntitle: "Sign Up"),
