@@ -1,3 +1,4 @@
+import 'package:brainboost/Signup/NewUserDataCollection.dart';
 import 'package:brainboost/Signup/welcomepage.dart';
 import 'package:brainboost/StudentUI/screens/dashboard.dart';
 import 'package:brainboost/firebase_options.dart';
@@ -16,6 +17,7 @@ void main() async {
   firebaseUser.bindStream(auth.userChanges());
 
   runApp(MaterialApp(
-      home: firebaseUser.value == null? WelcomePage(): Dashboard()));
+    debugShowCheckedModeBanner: false,
+    home: NewUserDataCollection(),
+      /*home: firebaseUser.value == null? WelcomePage(): Dashboard()*/));
 }
-

@@ -195,6 +195,8 @@ class SignupPage extends StatelessWidget {
                                   builder: (context) => ValidateEmailAndMob(
                                       email: inputemail,
                                       password: inputpassword,
+                                      mobileno: phoneno,
+                                      username: name,
                                       changeemail: (){
                                         Navigator.of(context).pop();
                                       },)));
