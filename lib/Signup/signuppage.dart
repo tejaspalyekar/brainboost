@@ -3,12 +3,12 @@ import 'package:brainboost/ReuseableWidgets/ReuseableTextinputField.dart';
 import 'package:brainboost/ReuseableWidgets/ReuseableTopContainer.dart';
 import 'package:brainboost/Signup/loginPage.dart';
 import 'package:brainboost/Signup/verifyEmail.dart';
-import 'package:brainboost/StudentUI/screens/dashboard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
+// ignore: must_be_immutable
 class SignupPage extends StatelessWidget {
   SignupPage({super.key});
   final auth = FirebaseAuth.instance;
@@ -94,6 +94,7 @@ class SignupPage extends StatelessWidget {
     }
   }
 
+  // ignore: non_constant_identifier_names
   bool CheckEmptyFields() {
     String username = name.text;
     String email = inputemail.text;

@@ -10,10 +10,8 @@ class Chat extends StatefulWidget {
 class _YearToYearState extends State<Chat> {
   @override
   Widget build(BuildContext context) {
-    return const Column(
-      children: [
-        Text("chats")
-      ],
+    return Container(
+      child: Text("chats"),
     );
   }
 }

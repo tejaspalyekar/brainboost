@@ -4,6 +4,9 @@ import 'package:brainboost/ReuseableWidgets/ReuseableTextinputField.dart';
 import 'package:brainboost/ReuseableWidgets/ReuseableTopContainer.dart';
 import 'package:brainboost/Signup/passwordReset.dart';
 import 'package:brainboost/StudentUI/screens/dashboard.dart';
+import 'package:brainboost/TeachersUI/TeachersHomepage.dart';
+import 'package:brainboost/data%20model/user_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -15,16 +18,46 @@ class LoginPage extends StatelessWidget {
   TextEditingController inputEmail = TextEditingController();
   TextEditingController inpuutPassword = TextEditingController();
 
+  Future<UserModel> fetchUserData() async {
+    String? useremail = auth.currentUser?.email;
+    final _db = FirebaseFirestore.instance;
+
+    final snapshot = await _db
+        .collection("Users")
+        .where("useremail", isEqualTo: useremail)
+        .get();
+    final usermodel =
+        snapshot.docs.map((e) => UserModel.fromshapshot(e)).single;
+    return usermodel;
+  }
+
   UserLogin(BuildContext context) async {
+    String? teacher = "";
     await auth
         .signInWithEmailAndPassword(
             email: inputEmail.text.trim(), password: inpuutPassword.text.trim())
         .then((value) {
       Navigator.of(context).push(DialogRoute(
-          context: context, builder: (context) => const Dashboard()));
+        context: context,
+        builder: (context) => FutureBuilder(
+          future: fetchUserData(),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasData) {
+                  UserModel userdata = snapshot.data as UserModel;
+                  print(userdata.studentTeacher);
+                  if (userdata.studentTeacher == "Teacher") {
+                    return TeachersHomepage();
+                  }
+                } 
+              } 
+              return Dashboard();
+          },
+        ),
+      ));
 
       Fluttertoast.showToast(
-          msg: "Sign in Sucessfull!",
+          msg: 'Sign in $teacher',
           backgroundColor: Colors.black,
           fontSize: 16,
           toastLength: Toast.LENGTH_SHORT,
@@ -55,11 +88,7 @@ class LoginPage extends StatelessWidget {
                   Navigator.of(context).pop();
                 }),
             Container(
-              padding: const EdgeInsets.only(
-                left: 30,
-                right: 30,
-                top: 100
-              ),
+              padding: const EdgeInsets.only(left: 30, right: 30, top: 100),
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

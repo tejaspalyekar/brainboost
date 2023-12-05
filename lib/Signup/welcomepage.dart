@@ -9,7 +9,9 @@ class WelcomePage extends StatelessWidget {
   WelcomePage({super.key});
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PopScope(
+      canPop: false,
+      child:  Scaffold(
         body: Container(
       margin: const EdgeInsets.only(top: 100),
       child: Column(
@@ -112,6 +114,7 @@ class WelcomePage extends StatelessWidget {
           )
         ],
       ),
-    ));
+    )));
+   
   }
 }

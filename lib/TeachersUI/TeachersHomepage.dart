@@ -1,7 +1,7 @@
 import 'package:brainboost/Signup/welcomepage.dart';
 import 'package:brainboost/StudentUI/screens/Chat.dart';
 import 'package:brainboost/StudentUI/screens/Notifications.dart';
-import 'package:brainboost/StudentUI/screens/overview.dart';
+import 'package:brainboost/TeachersUI/dashboard.dart';
 import 'package:brainboost/data%20model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,14 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Dashboard extends StatefulWidget {
-  const Dashboard({super.key});
+class TeachersHomepage extends StatefulWidget {
+  const TeachersHomepage({super.key});
 
   @override
-  State<Dashboard> createState() => _MyWidgetState();
+  State<TeachersHomepage> createState() => _MyWidgetState();
 }
 
-class _MyWidgetState extends State<Dashboard> {
+class _MyWidgetState extends State<TeachersHomepage> {
   int idx = 0;
   Color bottomNavClr1 = Colors.black;
   Color bottomNavClr2 = Colors.black;
@@ -51,7 +51,7 @@ class _MyWidgetState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    Widget screen = const Overview();
+    Widget screen = TeacherDashboard();
     //Widget body = const MainBody();
     String title = "Dashboard";
 
@@ -71,8 +71,8 @@ class _MyWidgetState extends State<Dashboard> {
       highlight0 = const Color.fromARGB(0, 255, 255, 255);
       highlight1 = const Color.fromARGB(0, 255, 255, 255);
       highlight2 = const Color.fromARGB(255, 0, 0, 0);
-      screen = const Notifications();
       title = "Notifications";
+      screen = const Notifications();
     } else {
       bottomNavClr1 = const Color.fromARGB(255, 252, 255, 76);
       bottomNavClr2 = const Color.fromARGB(255, 0, 0, 0);
@@ -95,7 +95,7 @@ class _MyWidgetState extends State<Dashboard> {
               Container(
                 color: Colors.black,
                 width: double.infinity,
-                height: 270,
+                height: 260,
                 child: DrawerHeader(
                   decoration: const UnderlineTabIndicator(
                       borderSide:
@@ -114,7 +114,8 @@ class _MyWidgetState extends State<Dashboard> {
                                 UserModel userdata = snapshot.data as UserModel;
                                 return Column(
                                   children: [
-                                    Image.asset("Assets/demo_profile.png"),
+                                    Image.asset("Assets/teacherprofilepic.png",
+                                        width: 100),
                                     const SizedBox(
                                       height: 5,
                                     ),
@@ -144,7 +145,10 @@ class _MyWidgetState extends State<Dashboard> {
                             } else {
                               return Column(
                                 children: [
-                                  Image.asset("Assets/demo_profile.png"),
+                                  Image.asset(
+                                    "Assets/teacherprofilepic.png",
+                                    width: 100,
+                                  ),
                                   const SizedBox(
                                     height: 5,
                                   ),
@@ -288,11 +292,14 @@ class _MyWidgetState extends State<Dashboard> {
           leading: Builder(
             builder: (context) {
               return Container(
-                decoration: const BoxDecoration(),
+                margin: const EdgeInsets.all(8),
+                decoration: const BoxDecoration(
+                  
+                    borderRadius: BorderRadius.all(Radius.circular(100))),
                 child: IconButton(
                   onPressed: () => Scaffold.of(context).openDrawer(),
                   icon: Image.asset(
-                    "Assets/demo_profile.png",
+                    "Assets/teacherprofilepic.png",
                   ),
                   tooltip:
                       MaterialLocalizations.of(context).openAppDrawerTooltip,
@@ -308,8 +315,8 @@ class _MyWidgetState extends State<Dashboard> {
               title,
               style: GoogleFonts.openSans(
                   fontSize: 27,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.black),
+                  color: Colors.black,
+                  fontWeight: FontWeight.w400),
             ),
           ),
           backgroundColor: const Color.fromARGB(255, 255, 255, 255)),

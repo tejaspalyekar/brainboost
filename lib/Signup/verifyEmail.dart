@@ -1,8 +1,9 @@
+// ignore: file_names
 import 'dart:async';
-import 'dart:convert';
+import 'package:brainboost/ReuseableWidgets/ReuseableButton.dart';
 import 'package:brainboost/ReuseableWidgets/ReuseableTopContainer.dart';
-import 'package:brainboost/StudentUI/screens/dashboard.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:brainboost/Signup/NewUserDataCollection.dart';
+import 'package:brainboost/data%20model/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -28,13 +29,12 @@ class ValidateEmailAndMob extends StatefulWidget {
 
 class _ValidateEmailAndMobState extends State<ValidateEmailAndMob> {
   final auth = FirebaseAuth.instance;
-  final _firestore = FirebaseFirestore.instance;
   bool timeexpire = false;
   bool emailverified = false;
   TextEditingController resetemail = TextEditingController();
   Duration myDuration = const Duration(minutes: 1);
   Timer? time;
-
+  UserModel userm = UserModel();
   void startTimer() {
     final user = auth.currentUser;
     user!.sendEmailVerification();
@@ -74,41 +74,21 @@ class _ValidateEmailAndMobState extends State<ValidateEmailAndMob> {
     if (user.emailVerified) {
       setState(() {
         time!.cancel();
-        myDuration = const Duration(minutes: 1);
+        myDuration = const Duration(minutes: 1);        
+        timeexpire = true;
+        emailverified = true;
       });
-      await storeUserData();
-      timeexpire = true;
+          // ignore: use_build_context_synchronously
+          Navigator.of(context).push(PageRouteBuilder(
+        pageBuilder: (context, __, ___) => NewUserDataCollection(
+            email: widget.email.text.trim(),
+            mobileno: widget.mobileno.text.trim(),
+            password: widget.password.text.trim(),
+            username: widget.username.text.trim(),
+        )));
     }
   }
 
-  storeUserData() {
-    _firestore.collection("Users").add({
-          "username": widget.username.text.trim(),
-          "useremail": widget.email.text.trim(),
-          "userphoneno": widget.mobileno.text.trim(),
-          "userpassword": widget.password.text.trim(),
-        })
-        .then((value) {
-          Navigator.of(context).push(PageRouteBuilder(
-            pageBuilder: (context, __, ___) => const Dashboard()));
-         Fluttertoast.showToast(
-            msg: "Sign Up Sucessfull",
-            backgroundColor: Colors.black,
-            fontSize: 16,
-            toastLength: Toast.LENGTH_SHORT,
-            textColor: Colors.white);
-        })
-        .onError((error, stackTrace) {
-        final user = auth.currentUser;
-        user!.delete();
-          Fluttertoast.showToast(
-          msg: "unable to create account..try again",
-          backgroundColor: Colors.black,
-          fontSize: 16,
-          toastLength: Toast.LENGTH_SHORT,
-          textColor: Colors.white);
-        });
-  }
 
   @override
   void initState() {
@@ -262,7 +242,23 @@ class _ValidateEmailAndMobState extends State<ValidateEmailAndMob> {
                           strokeCap: StrokeCap.round,
                         ),
                       )
-                    : const Text(""),
+                    : emailverified? 
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 50),
+                      width: double.infinity,
+                      height: 50,
+                      child: ReuseableButton(
+                        btntitle: "Next",
+                        btncolor: Colors.yellow,
+                        fun: (){
+                          Navigator.of(context).push(PageRouteBuilder(
+                            pageBuilder: (context, __, ___) => NewUserDataCollection(
+                                email: widget.email.text.trim(),
+                                mobileno: widget.mobileno.text.trim(),
+                                password: widget.password.text.trim(),
+                                username: widget.username.text.trim(),
+                           )));
+                        },),):const Text("")
               ],
             ),
           ),

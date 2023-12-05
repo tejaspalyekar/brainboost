@@ -3,13 +3,16 @@ import 'package:brainboost/Signup/ProfileSetup/StudentorTeacher.dart';
 import 'package:flutter/material.dart';
 
 class NewUserDataCollection extends StatelessWidget {
-  NewUserDataCollection({super.key});
+  NewUserDataCollection({super.key,this.email,this.mobileno,this.password,this.username});
+  String? email;
+  String? password;
+  String? mobileno;
+  String?  username;
   List<String> questionsTitle = [
     "Let Us Know If You're a Student or Teacher",
     "",
   ];
   int questionNo = 0;
-  Widget currquestion = StudentOrTeacher();
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +48,12 @@ class NewUserDataCollection extends StatelessWidget {
                   const SizedBox(
                     height: 15,
                   ),
-                  currquestion,
+                  StudentOrTeacher(
+                    email: email,
+                    mobileno: mobileno,
+                    password: password,
+                    username: username,
+                  )
 
                 ],
               ),
