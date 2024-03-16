@@ -1,7 +1,7 @@
 
-import 'package:brainboost/StudentUI/screens/SWO.dart';
-import 'package:brainboost/StudentUI/screens/Sem.dart';
-import 'package:brainboost/StudentUI/screens/semmenu.dart';
+import 'package:brainboost/UI/StudentUI/screens/SWO.dart';
+import 'package:brainboost/UI/StudentUI/screens/Sem.dart';
+import 'package:brainboost/UI/StudentUI/screens/semmenu.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 

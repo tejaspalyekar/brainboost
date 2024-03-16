@@ -1,5 +1,5 @@
 import 'package:brainboost/ReuseableWidgets/ReuseableTopContainer.dart';
-import 'package:brainboost/Signup/ProfileSetup/StudentorTeacher.dart';
+import 'package:brainboost/UI/Signup/ProfileSetup/StudentorTeacher.dart';
 import 'package:flutter/material.dart';
 
 class NewUserDataCollection extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'package:brainboost/ReuseableWidgets/ReuseableButton.dart';
-import 'package:brainboost/StudentUI/screens/dashboard.dart';
-import 'package:brainboost/TeachersUI/TeachersHomepage.dart';
+import 'package:brainboost/UI/StudentUI/screens/dashboard.dart';
+import 'package:brainboost/UI/TeachersUI/TeachersHomepage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

@@ -1,8 +1,8 @@
 import 'package:brainboost/ReuseableWidgets/ReuseableButton.dart';
 import 'package:brainboost/ReuseableWidgets/ReuseableTextinputField.dart';
 import 'package:brainboost/ReuseableWidgets/ReuseableTopContainer.dart';
-import 'package:brainboost/Signup/loginPage.dart';
-import 'package:brainboost/Signup/verifyEmail.dart';
+import 'package:brainboost/UI/Signup/loginPage.dart';
+import 'package:brainboost/UI/Signup/verifyEmail.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';

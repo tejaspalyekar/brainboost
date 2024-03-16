@@ -1,5 +1,5 @@
 
-import 'package:brainboost/StudentUI/model/semlist.dart';
+import 'package:brainboost/UI/StudentUI/model/semlist.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

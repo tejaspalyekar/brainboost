@@ -1,7 +1,7 @@
 
-import 'package:brainboost/StudentUI/screens/MainBody.dart';
-import 'package:brainboost/StudentUI/screens/Po.dart';
-import 'package:brainboost/StudentUI/screens/YearToYearAssesment.dart';
+import 'package:brainboost/UI/StudentUI/screens/MainBody.dart';
+import 'package:brainboost/UI/StudentUI/screens/Po.dart';
+import 'package:brainboost/UI/StudentUI/screens/YearToYearAssesment.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';

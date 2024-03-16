@@ -1,7 +1,7 @@
-import 'package:brainboost/Signup/welcomepage.dart';
-import 'package:brainboost/StudentUI/screens/Chat.dart';
-import 'package:brainboost/StudentUI/screens/Notifications.dart';
-import 'package:brainboost/StudentUI/screens/overview.dart';
+import 'package:brainboost/UI/Signup/welcomepage.dart';
+import 'package:brainboost/UI/StudentUI/screens/Chat.dart';
+import 'package:brainboost/UI/StudentUI/screens/Notifications.dart';
+import 'package:brainboost/UI/StudentUI/screens/overview.dart';
 import 'package:brainboost/data%20model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -39,6 +39,7 @@ class _MyWidgetState extends State<Dashboard> {
 
   Future<UserModel> fetchUserData() async {
     String? useremail = auth.currentUser?.email;
+    print(auth.currentUser?.email);
 
     final snapshot = await _db
         .collection("Users")
@@ -95,7 +96,7 @@ class _MyWidgetState extends State<Dashboard> {
               Container(
                 color: Colors.black,
                 width: double.infinity,
-                height: 270,
+                height: 210,
                 child: DrawerHeader(
                   decoration: const UnderlineTabIndicator(
                       borderSide:
@@ -129,7 +130,7 @@ class _MyWidgetState extends State<Dashboard> {
                                     Text(
                                       '${userdata.email}',
                                       style: const TextStyle(
-                                          color: Colors.white, fontSize: 12),
+                                          color: Colors.white, fontSize: 10),
                                     )
                                   ],
                                 );

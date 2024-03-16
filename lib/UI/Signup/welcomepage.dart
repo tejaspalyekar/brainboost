@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:brainboost/ReuseableWidgets/ReuseableButton.dart';
-import 'package:brainboost/Signup/loginPage.dart';
-import 'package:brainboost/Signup/signuppage.dart';
+import 'package:brainboost/UI/Signup/loginPage.dart';
+import 'package:brainboost/UI/Signup/signuppage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

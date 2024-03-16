@@ -1,4 +1,4 @@
-import 'package:brainboost/StudentUI/widgets/notification.dart';
+import 'package:brainboost/UI/StudentUI/widgets/notification.dart';
 import 'package:flutter/material.dart';
 
 class Notifications extends StatefulWidget {

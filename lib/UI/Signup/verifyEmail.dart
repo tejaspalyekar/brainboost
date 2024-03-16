@@ -2,7 +2,7 @@
 import 'dart:async';
 import 'package:brainboost/ReuseableWidgets/ReuseableButton.dart';
 import 'package:brainboost/ReuseableWidgets/ReuseableTopContainer.dart';
-import 'package:brainboost/Signup/NewUserDataCollection.dart';
+import 'package:brainboost/UI/Signup/NewUserDataCollection.dart';
 import 'package:brainboost/data%20model/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

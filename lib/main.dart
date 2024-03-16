@@ -1,7 +1,7 @@
-import 'package:brainboost/Signup/loginPage.dart';
-import 'package:brainboost/Signup/welcomepage.dart';
-import 'package:brainboost/StudentUI/screens/dashboard.dart';
-import 'package:brainboost/TeachersUI/TeachersHomepage.dart';
+import 'package:brainboost/UI/Signup/loginPage.dart';
+import 'package:brainboost/UI/Signup/welcomepage.dart';
+import 'package:brainboost/UI/StudentUI/screens/dashboard.dart';
+import 'package:brainboost/UI/TeachersUI/TeachersHomepage.dart';
 import 'package:brainboost/data%20model/user_model.dart';
 import 'package:brainboost/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
