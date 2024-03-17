@@ -1,4 +1,7 @@
 // ignore_for_file: avoid_unnecessary_containers
+import 'package:brainboost/Services/semMarksService.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:lottie/lottie.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/components/border/gf_border.dart';
@@ -15,25 +18,28 @@ class YearToYear extends StatefulWidget {
 
 class _YearToYearState extends State<YearToYear> {
   PageController _pcontroller = PageController();
-  late List<_ChartData> data;
+  late List<_ChartData> data = [];
   late TooltipBehavior _tooltip;
-
+  SemMarksService Semmarksservice = SemMarksService();
+  static final auth = FirebaseAuth.instance;
+  List semlist = ['sem1', 'sem2', 'sem3', 'sem4', 'sem5', 'sem6', 'sem7'];
+  bool loading = true;
   @override
   void initState() {
-    data = [
-      _ChartData('Sem1', 9),
-      _ChartData('Sem2', 8),
-      _ChartData('Sem3', 7.5),
-      _ChartData('Sem4', 6),
-      _ChartData('Sem5', 8.5),
-      _ChartData(
-        'Sem6',
-        9,
-      ),
-      _ChartData('Sem7', 6.9)
-    ];
+    fetchallsemdata();
     _tooltip = TooltipBehavior(enable: true);
     super.initState();
+  }
+
+  fetchallsemdata() async {
+    for (int i = 0; i < 7; i++) {
+      final marksmodel = await Semmarksservice.getcurrsemmarks(
+          auth.currentUser!.email!, semlist[i]);
+      data.add(_ChartData(semlist[i], marksmodel.currentstudentcgpa));
+    }
+    setState(() {
+      loading = false;
+    });
   }
 
   @override
@@ -71,35 +77,39 @@ class _YearToYearState extends State<YearToYear> {
                 color: Colors.white,
                 boxShadow: [BoxShadow(color: Colors.black, blurRadius: 2)],
                 borderRadius: BorderRadius.all(
-                  Radius.circular(20),
+                  Radius.circular(15),
                 ),
               ),
-              child: SfCartesianChart(
-                  primaryXAxis: const CategoryAxis(
-                    minimum: 0,
-                  ),
-                  primaryYAxis:
-                      const NumericAxis(minimum: 5, maximum: 10, interval: 1),
-                  tooltipBehavior: _tooltip,
-                  series: <CartesianSeries<_ChartData, String>>[
-                    AreaSeries<_ChartData, String>(
+              child: loading
+                  ? Lottie.asset("Assets/graphloading.json")
+                  : SfCartesianChart(
+                      primaryXAxis: const CategoryAxis(
+                        minimum: 0,
+                      ),
+                      primaryYAxis: const NumericAxis(
+                          minimum: 5, maximum: 10, interval: 1),
+                      tooltipBehavior: _tooltip,
+                      enableAxisAnimation: true,
+                      enableMultiSelection: true,
                       
-                      dataSource: data,
-                      xValueMapper: (_ChartData data, _) => data.x,
-                      yValueMapper: (_ChartData data, _) => data.y,
-                      name: 'Performance',
-                      borderGradient: const LinearGradient(colors: [
-                        Color.fromARGB(255, 255, 191, 0),
-                        Color.fromARGB(255, 255, 196, 19),
-                      ]),
-                      gradient: const LinearGradient(colors: [
-                        Color.fromARGB(255, 255, 220, 114),
-                        Color.fromARGB(255, 255, 227, 144),
-                        Color.fromARGB(198, 255, 235, 174),
-                        Color.fromARGB(198, 255, 241, 198)
-                      ]),
-                    )
-                  ])),
+                      series: <CartesianSeries<_ChartData, String>>[
+                          AreaSeries<_ChartData, String>(
+                            dataSource: data,
+                            xValueMapper: (_ChartData data, _) => data.x,
+                            yValueMapper: (_ChartData data, _) => data.y,
+                            name: 'Performance',
+                            borderGradient: const LinearGradient(colors: [
+                              Color.fromARGB(255, 255, 191, 0),
+                              Color.fromARGB(255, 255, 196, 19),
+                            ]),
+                            gradient: const LinearGradient(colors: [
+                              Color.fromARGB(255, 255, 220, 114),
+                              Color.fromARGB(255, 255, 227, 144),
+                              Color.fromARGB(198, 255, 235, 174),
+                              Color.fromARGB(198, 255, 241, 198)
+                            ]),
+                          )
+                        ])),
           const SizedBox(height: 20),
           SmoothPageIndicator(
               onDotClicked: (index) {
