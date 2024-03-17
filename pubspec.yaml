@@ -47,6 +47,8 @@ dependencies:
   get: ^4.6.6
   fluttertoast: ^8.0.9
   cloud_firestore: ^4.13.2
+  fl_chart: ^0.66.2
+  http: ^1.2.0
   
 dev_dependencies:
   flutter_test:

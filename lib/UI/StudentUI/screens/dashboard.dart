@@ -309,7 +309,7 @@ class _MyWidgetState extends State<Dashboard> {
               title,
               style: GoogleFonts.openSans(
                   fontSize: 27,
-                  fontWeight: FontWeight.w400,
+                  fontWeight: FontWeight.w600,
                   color: Colors.black),
             ),
           ),

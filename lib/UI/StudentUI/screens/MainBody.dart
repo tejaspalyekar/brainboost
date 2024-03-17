@@ -1,7 +1,5 @@
-
 import 'package:brainboost/UI/StudentUI/screens/SWO.dart';
 import 'package:brainboost/UI/StudentUI/screens/Sem.dart';
-import 'package:brainboost/UI/StudentUI/screens/semmenu.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -37,11 +35,6 @@ class _MainBodyState extends State<MainBody> {
             children: [
               Sem(currsem: currsem),
               const Swo(),
-              SemMenu(
-                changesem: (sem) {
-                  changesem(sem);
-                },
-              )
             ],
           ),
         ),
@@ -55,7 +48,7 @@ class _MainBodyState extends State<MainBody> {
                   curve: Curves.easeIn);
             },
             controller: _controller,
-            count: 3,
+            count: 2,
             effect: const ScaleEffect(
                 activeStrokeWidth: 0.1,
                 dotWidth: 13,

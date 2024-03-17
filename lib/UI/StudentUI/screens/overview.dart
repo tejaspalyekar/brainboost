@@ -1,4 +1,3 @@
-
 import 'package:brainboost/UI/StudentUI/screens/MainBody.dart';
 import 'package:brainboost/UI/StudentUI/screens/Po.dart';
 import 'package:brainboost/UI/StudentUI/screens/YearToYearAssesment.dart';
@@ -7,8 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Overview extends StatefulWidget {
-
-  const Overview({super.key,});
+  const Overview({
+    super.key,
+  });
   @override
   State<Overview> createState() => _OverviewState();
 }
@@ -39,11 +39,10 @@ class _OverviewState extends State<Overview> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     Widget body = const MainBody();
-    
+
     if (bodyidx == 1) {
       iconsize = 30;
       textsize = 18;
@@ -97,7 +96,7 @@ class _OverviewState extends State<Overview> {
         Container(
           width: double.infinity,
           height: 60,
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 15),
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -184,12 +183,7 @@ class _OverviewState extends State<Overview> {
             ),
           ),
         ),
-        const SizedBox(
-          height: 20,
-        ),
         body,
-        
-        
       ],
     );
   }
