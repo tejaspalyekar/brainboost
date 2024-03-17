@@ -1,7 +1,8 @@
 import 'package:brainboost/Services/semMarksService.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:lottie/lottie.dart';
 
 class Sem extends StatefulWidget {
   Sem({super.key, this.currsem});
@@ -12,8 +13,13 @@ class Sem extends StatefulWidget {
 
 class _SemState extends State<Sem> {
   SemMarksService Semmarksservice = SemMarksService();
+  static final auth = FirebaseAuth.instance;
   bool grapgloading = true;
-  final List<FlSpot> points = [
+
+  int selectedcategory = 50;
+  int len = 50;
+  late int studentrank;
+  List<FlSpot> points = [
     /*const FlSpot(1,
         55), //ml FlSpot(x,y) x= subject no  y = marks obtained in that subject
     const FlSpot(2, 50), //csl
@@ -21,165 +27,64 @@ class _SemState extends State<Sem> {
     const FlSpot(4, 60), //bda
     const FlSpot(5, 64), //nlp*/
   ];
-  final List<FlSpot> avg = [
+  List<FlSpot> avg = [
     /*const FlSpot(1, 60), //ml
     const FlSpot(2, 60), //csl
     const FlSpot(3, 60), //bkc
     const FlSpot(4, 60), //bda
     const FlSpot(5, 60), //nlp*/
   ];
-  var items = ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Sem 5', 'Sem 6', 'Sem 7'];
-  String dropdownvalue = 'Sem 1';
-  List studentsmarks = [
-    ["desalechirag-cmpn@atharvacoe.ac.in", 9.9],
-    ["makwanadivya-cmpn@atharvacoe.ac.in", 9.0],
-    ["yadavarvind-cmpn@atharvacoe.ac.in", 9.3],
-    ["addagatlahrishikesh-cmpn@atharvacoe.ac.in", 9.0],
-    ["adenisha-cmpn@atharvacoe.ac.in", 9.2],
-    ["agrawalshree-cmpn@atharvacoe.ac.in", 9.2],
-    ["khanahezamahewar-cmpn@atharvacoe.ac.in", 9.7],
-    ["ankushraoapurva-cmpn@atharvacoe.ac.in", 8.5],
-    ["balekarshruti-cmpn@atharvacoe.ac.in", 9.5],
-    ["bandivadekardhruvesh-cmpn@atharvacoe.ac.in", 9.7],
-    ["bandiwadekarparth-cmpn@atharvacoe.ac.in", 8.3],
-    ["bhalekarnupur-cmpn@atharvacoe.ac.in", 9.0],
-    ["bhatadedevraj-cmpn@atharvacoe.ac.in", 8.8],
-    ["bhattswati-cmpn@atharvacoe.ac.in", 9.1],
-    ["bogharanirmal-cmpn@atharvacoe.ac.in", 9.0],
-    ["borlikartanishka-cmpn@atharvacoe.ac.in", 9.5],
-    ["chandradhaval-cmpn@atharvacoe.ac.in", 9.1],
-    ["chaudharivaibhav-cmpn@atharvacoe.ac.in ", 9.4],
-    ["Chauhanshlok-cmpn@atharvacoe.ac.in", 9.2],
-    ["dhageaditya-cmpn@atharvacoe.ac.in", 8.6],
-    ["epilirahul-cmpn@atharvacoe.ac.in", 8.9],
-    ["gadeamogh-cmpn@atharvacoe.ac.in", 9.4],
-    ["gajorajay-cmpn@atharvacoe.ac.in", 9.6],
-    ["gaonkarisha-cmpn@atharvacoe.ac.in", 9.4],
-    ["gawadesagar-cmpn@atharvacoe.ac.in", 9.0],
-    ["girichanchal-cmpn@atharvacoe.ac.in", 9.5],
-    ["guptaprince-cmpn@atharvacoe.ac.in", 8.7],
-    ["hadalharshal-cmpn@atharvacoe.ac.in ", 9.0],
-    ["guptashivamrajkumar-cmpn@atharvacoe.ac.in", 9.5],
-    ["jadhavruchika-cmpn@athavacoe.ac.in", 9.2],
-    ["jagtappranav-cmpn@atharvacoe.ac.in", 9.1],
-    ["jagtapshruti-cmpn@atharvacoe.ac.in", 9.0],
-    ["jethvamitesh-cmpn@atharvacoe.ac.in", 8.9],
-    ["Jhalakamlendrasingh-cmpn@atharvacoe.ac.in", 8.8],
-    ["joshiaman-cmpn@atharvacoe.ac.in", 8.8],
-    ["kadamsakshi-cmpn@atharvacoe.ac.in", 9.4],
-    ["kadamshantanu-cmpn@atharvacoe.ac.in", 8.8],
-    ["kanganeantara-cmpn@atharvacoe.ac.in", 9.0],
-    ["kawletanvi-cmpn@atharvacoe.ac.in", 9.4],
-    ["khaleshubham-cmpn@atharvacoe.ac.in", 9.4],
-    ["khanaadilnasiruddin-cmpn@atharvacoe.ac.in", 9.7],
-    ["kinipranav-cmpn@atharvacoe.ac.in", 9.4],
-    ["kotashashank-cmpn@atharvacoe.ac.in", 9.2],
-    ["kothariashritha-cmpn@atharvacoe.ac.in", 9.7],
-    ["Lohiyakushal-cmpn@atharvacoe.ac.in ", 9.2],
-    ["manesiariyaan-cmpn@atharvacoe.ac.in", 8.8],
-    ["mishrapushpesh-cmpn@atharvacoe.ac.in ", 8.9],
-    ["Mishraswati-cmpn@atharvacoe.ac.in", 9.2],
-    ["mistrykunal-cmpn@atharvacoe.ac.in", 9.6],
-    ["abdulrehman-cmpn@atharvacoe.ac.in", 9.7],
-    ["moresairaj-cmpn@atharvacoe.ac.in", 9.1],
-    ["myanagaurav@atharvacoe.ac.in", 9.3],
-    ["suhasinigunjite-cmpn@atharvacoe.ac.in", 8.7],
-    ["vrushalbhurkud-cmpn@atharvacoe.ac.in", 8.8],
-    ["shaikhsanib-cmpn@atharvacoe.ac.in", 8.8],
-    ["advaysurve-cmpn@atharvacoe.ac.in", 9.3],
-    ["tejaspalyekar-cmpn@atharvacoe.ac.in", 8.9],
-    ["kulashreepatil-cmpn@atharvacoe.ac.in", 8.9],
-    ["rahulsutar-cmpn@atharvacoe.ac.in", 9.4],
-    ["sahiln-cmpn@atharvacoe.ac.in", 9.1],
-    ["shrishtisoni-cmpn@atharvacoe.ac.in", 9.5],
-    ["chaitrasuvarna-cmpn@atharvacoe.ac.in", 9.1],
-    ["ameyabavkar-cmpn@atharvacoe.ac.in", 9.3],
-    ["omkarshinde-cmpn@atharvacoe.ac.in", 8.8],
-    ["killedaryojana-cmpn@atharvacoe.ac.in", 9.0],
-    ["abhishekgoykar-cmpn@atharvacoe.ac.in ", 9.2],
-    ["shwetajalgaonkar-cmpn@atharvacoe.ac.in", 9.2],
-    ["naikneha-cmpn@atharvacoe.ac.in", 9.0],
-    ["nandeshwarriya-cmpn@atharvacoe.ac.in", 9.0],
-    ["nikamdevesh-cmpn@atharvacoe.ac.in", 8.5],
-    ["nikammanthan-cmpn@atharvacoe.ac.in", 9.5],
-    ["nikampranav-cmpn@atharvacoe.ac.in", 9.2],
-    ["panandeprachi-cmpn@atharvacoe.ac.in", 9.5],
-    ["parabprathmesh-cmpn@atharvacoe.ac.in", 9.1],
-    ["parayearyan-cmpn@atharvacoe.ac.in ", 8.7],
-    ["patelbobby-cmpn@atharvacoe.ac.in", 9.2],
-    ["patelsania-cmpn@atharvacoe.ac.in", 8.6],
-    ["patilpavan-cmpn@atharvacoe.ac", 9.1],
-    ["patilresham-cmpn@atharvacoe.ac.in", 9.2],
-    ["patilsanket-cmpn@atharvacoe.ac.in ", 8.9],
-    ["pawarmitali-cmpn@atharvacoe.ac.in", 9.3],
-    ["pawarmonali-cmpn@atharvacoe.ac.in", 9.4],
-    ["Piseaditya-cmpn@atharvacoe.ac.in ", 9.4],
-    ["poriwadeakanksha-cmpn@atharvacoe.ac.in ", 9.7],
-    ["prajapatisuraj-cmpn@atharvacoe.ac.in", 9.3],
-    ["rathodkeval-cmpn@atharvacoe.ac.in", 9.2],
-    ["rathodpriyanshu-cmpn@atharvacoe.ac.in", 9.0],
-    ["rathodmihir-cmpn@atharvacoe.ac.in", 9.1],
-    ["redkargaurav-cmpn@atharvacoe.ac.in", 9.8],
-    ["sahsneha-cmpn@atharvacoe.ac.in", 9.0],
-    ["sangarprachi-cmpn@atharvacoe.ac.in", 9.3],
-    ["sangleprem-cmpn@atharvacoe.ac.in", 9.2],
-    ["sardharasmit-cmpn@atharvacoe.ac.in", 9.6],
-    ["saseom-cmpn@atharvacoe.ac.in", 9.0],
-    ["satheshubham-cmpn@atharvacoe.ac.in", 8.5],
-    ["sawantryan-cmpn@atharvacoe.ac.in", 9.1],
-    ["omkarsawant-cmpn@atharvacoe.ac.in", 9.4],
-    ["shaikhamir-cmpn@atharvacoe.ac.in", 9.6],
-    ["shaikhjamil-cmpn@atharvacoe.ac.in", 9.7],
-    ["shaikhsameer-cmpn@atharvacoe.ac.in", 9.2],
-    ["sharmaaniket-cmpn@atharvacoe.ac.in", 9.6],
-    ["shrmasunil-cmpn@atharvacoe.ac.in", 8.8],
-    ["shelkesaurav-cmpn@atharvacoe.ac.in", 9.2],
-    ["shettyprajnesh-cmpn@atharvacoe.ac.in", 9.6],
-    ["shindedigvijay-cmpn@atharvacoe.ac.in", 9.1],
-    ["shinderutuja-cmpn@atharvacoe.ac.in", 9.5],
-    ["shingaredevyani-cmpn@atharvacoe.ac.in", 9.1],
-    ["singhsoumya-cmpn@atharvacoe.ac.in", 9.4],
-    ["singhpriyanshu-cmpn@atharvacoe.ac.in", 9.1],
-    ["singhrohan-cmpn@atharvacoe.ac.in", 9.5],
-    ["singhsakshi-cmpn@atharvacoe.ac.in", 9.2],
-    ["sojitraparth-cmpn@atharvacoe.ac.in", 9.2],
-    ["solankidivy-cmpn@atharvacoe.ac.in", 9.5],
-    ["solankivenus-cmpn@atharva.coe.ac.in", 9.4],
-    ["suvarnagautam-cmpn@atharvacoe.ac.in", 8.4],
-    ["tankpratham-cmpn@atharvacoe.ac.in", 8.9],
-    ["tayadesiddharth-cmpn@atharvacoe.ac.in ", 8.8],
-    ["telikrushna-cmpn@atharvacoe.ac.in", 9.0],
-    ["thakurshyam-cmpn@atharvacoe.ac.in", 9.2],
-    ["tirlotkarpradnya-cmpn@atharvacoe.ac.in", 9.0],
-    ["tripathiadarsh-cmpn@atharvacoe.ac.in", 8.9],
-    ["tripathiankush-cmpn@atharvacoe.ac.in", 9.3],
-    ["ubalevanshika-cmpn@atharvacoe.ac.in", 9.2],
-    ["vannamdeepali-cmpn@atharvacoe.ac.in", 9.2],
-    ["vartakvedant-cmpn@atharvacoe.ac.in", 9.7],
-    ["wadiaaman-cmpn@atharvacoe.ac.in", 8.8],
-    ["waghchaureaayush-cmpn@atharvacoe.ac.in", 9.2],
-    ["waradkarsahil-cmpn@atharvacoe.ac.in", 8.9],
-    ["yadavudit-cmpn@atharvacoe.ac.in", 8.6],
-    ["devresushant-cmpn@atharvacoe.ac.in", 7.9]
+  var items = [
+    'Semester 1',
+    'Semester 2',
+    'Semester 3',
+    'Semester 4',
+    'Semester 5',
+    'Semester 6',
+    'Semester 7'
   ];
-  double avgcgpa = 9.15;
-  double currstudentcgpa = 9.2;
+  String dropdownvalue = 'Semester 1';
+  List studentsmarks = [];
+  late double avgcgpa;
+  late double currstudentcgpa;
   late FlSpot yourperformance;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    //Semmarksservice.getcurrsemmarks("", dropdownvalue);
+    getdataservice();
+  }
+
+  getdataservice() async {
+    final semdata = await Semmarksservice.getcurrsemmarks(
+        auth.currentUser!.email!,
+        dropdownvalue == "Semester 1"
+            ? "sem1"
+            : dropdownvalue == "Semester 2"
+                ? "sem2"
+                : dropdownvalue == "Semester 3"
+                    ? "sem3"
+                    : dropdownvalue == "Semester 4"
+                        ? "sem4"
+                        : dropdownvalue == "Semester 5"
+                            ? "sem5"
+                            : dropdownvalue == "Semester 6"
+                                ? "sem6"
+                                : "sem7");
+    studentsmarks = semdata.allStudentMarksList;
+    currstudentcgpa = semdata.currentstudentcgpa;
+    avgcgpa = semdata.semavg;
     mapdatapoints();
   }
 
   mapdatapoints() {
-    print(studentsmarks.length);
-    for (int i = 0; i < studentsmarks.length; i++) {
+    len = selectedcategory == 150 ? studentsmarks.length : selectedcategory;
+    for (int i = 0; i < len; i++) {
       avg.add(FlSpot(i + 1, avgcgpa));
       points.add(FlSpot(i.toDouble() + 1, studentsmarks[i][1]));
-      if (studentsmarks[i][0] == "kotashashank-cmpn@atharvacoe.ac.in") {
+      if (studentsmarks[i][0] == auth.currentUser!.email) {
         yourperformance = FlSpot(i + 1, studentsmarks[i][1]);
+        studentrank = i;
       }
     }
     setState(() {
@@ -200,125 +105,299 @@ class _SemState extends State<Sem> {
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             decoration: const BoxDecoration(
-                color: Colors.white,
+                color: Color.fromARGB(255, 252, 249, 249),
                 borderRadius: BorderRadius.all(Radius.circular(10)),
-                boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 2)]),
+                boxShadow: [
+                  BoxShadow(
+                      color: Color.fromARGB(255, 82, 82, 82), blurRadius: 2)
+                ]),
             padding: const EdgeInsets.all(10),
             child: Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Align(
-                        alignment: AlignmentDirectional.topStart,
-                        child: Text(dropdownvalue,
-                            style: GoogleFonts.roboto(
-                              color: const Color.fromARGB(255, 0, 0, 0),
-                              fontSize: 20,
-                            ))),
                     DropdownButton(
                       underline: const Text(""),
                       value: dropdownvalue,
                       elevation: 2,
                       icon: const Icon(Icons.keyboard_arrow_down),
-
                       items: items.map((String items) {
                         return DropdownMenuItem(
                           value: items,
                           child: Text(items),
                         );
                       }).toList(),
-                      // After selecting the desired option,it will
-                      // change button value to selected value
                       onChanged: (String? newValue) {
                         setState(() {
                           dropdownvalue = newValue!;
+                          points = [];
+                          avg = [];
+                          grapgloading = true;
                         });
+                        getdataservice();
                       },
                     ),
                   ],
                 ),
                 Container(
                   margin: const EdgeInsets.only(top: 10),
-                  padding: const EdgeInsets.only(bottom: 10),
-                  height: 220,
+                  padding: const EdgeInsets.only(bottom: 10, right: 10),
+                  height: 250,
                   width: double.infinity,
                   child: grapgloading
-                      ? const Center(
+                      ? Center(
                           child: SizedBox(
                               height: 100,
                               width: 100,
-                              child: CircularProgressIndicator()),
+                              child: Lottie.asset("Assets/graphloading.json")),
                         )
-                      : AnimatedPositionedDirectional(
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeInOut,
-                          child: LineChart(
-                              curve: Curves.bounceInOut,
-                              LineChartData(
-                                maxY: 10,
-                                maxX: studentsmarks.length.toDouble(),
-                                minY: 0,
-                                backgroundColor:
-                                    const Color.fromARGB(255, 32, 32, 32),
-                                lineBarsData: [
-                                  LineChartBarData(
-                                      dotData: const FlDotData(show: false),
-                                      color:
-                                          const Color.fromARGB(255, 24, 204, 0),
-                                      spots: avg),
-                                  LineChartBarData(
-                                      isStrokeCapRound: true,
-                                      isStrokeJoinRound: true,
-                                      spots: points,
-                                      dotData: FlDotData(
-                                        getDotPainter:
-                                            (spot, percent, barData, index) {
-                                          final isYourPerformance =
-                                              spot.x == yourperformance.x &&
-                                                  spot.y == yourperformance.y;
+                      : Column(
+                          children: [
+                            Expanded(
+                              child: LineChart(
+                                  curve: Curves.bounceInOut,
+                                  LineChartData(
+                                    maxY: 10,
+                                    maxX: len.toDouble(),
+                                    minY: 6,
+                                    lineBarsData: [
+                                      LineChartBarData(
+                                          dotData: const FlDotData(show: false),
+                                          color: const Color.fromARGB(
+                                              255, 24, 204, 0),
+                                          gradient:
+                                              const LinearGradient(colors: [
+                                            Color.fromARGB(255, 23, 194, 0),
+                                            Color.fromARGB(255, 24, 207, 0),
+                                            Color.fromARGB(255, 27, 230, 0),
+                                            Color.fromARGB(255, 27, 230, 0),
+                                            Color.fromARGB(255, 40, 255, 11),
+                                          ]),
+                                          spots: avg),
+                                      LineChartBarData(
+                                          isStrokeCapRound: true,
+                                          isStrokeJoinRound: true,
+                                          spots: points,
+                                          dotData: FlDotData(
+                                            getDotPainter: (spot, percent,
+                                                barData, index) {
+                                              final isYourPerformance =
+                                                  spot.x == yourperformance.x &&
+                                                      spot.y ==
+                                                          yourperformance.y;
 
-                                          return FlDotCirclePainter(
-                                            radius: 4,
-                                            color: isYourPerformance
-                                                ? Colors.red
-                                                : Colors.blue,
-                                          );
+                                              return FlDotCirclePainter(
+                                                radius: 4,
+                                                color: isYourPerformance
+                                                    ? Colors.red
+                                                    : Colors.blue,
+                                              );
+                                            },
+                                            checkToShowDot: (spot, barData) =>
+                                                spot == yourperformance,
+                                          ),
+                                          gradient:
+                                              const LinearGradient(colors: [
+                                            Color.fromARGB(255, 111, 18, 218),
+                                            Color.fromARGB(255, 119, 0, 255),
+                                            Color.fromARGB(255, 145, 49, 255),
+                                          ])),
+                                    ],
+                                    borderData: FlBorderData(show: false),
+                                    //gridData: const FlGridData(show: false),
+                                    titlesData: const FlTitlesData(
+                                      bottomTitles: AxisTitles(
+                                          sideTitles:
+                                              SideTitles(showTitles: false)),
+                                      topTitles: AxisTitles(
+                                          sideTitles:
+                                              SideTitles(showTitles: false)),
+                                      rightTitles: AxisTitles(
+                                          sideTitles: SideTitles(
+                                        showTitles: false,
+                                      )),
+                                    ),
+                                    lineTouchData: LineTouchData(
+                                        enabled: true,
+                                        touchCallback: (FlTouchEvent event,
+                                            LineTouchResponse? touchResponse) {
+                                          // TODO : Utilize touch event here to perform any operation
                                         },
-                                        checkToShowDot: (spot, barData) =>
-                                            spot == yourperformance,
-                                      ),
-                                      gradient: const LinearGradient(colors: [
-                                        Color.fromARGB(255, 111, 18, 218),
-                                        Color.fromARGB(255, 119, 0, 255),
-                                        Color.fromARGB(255, 145, 49, 255),
-                                      ])),
-                                ],
-                                borderData: FlBorderData(
-                                    border: const Border(
-                                        bottom: BorderSide(),
-                                        left: BorderSide())),
-                                gridData: const FlGridData(show: false),
-                                titlesData: const FlTitlesData(
-                                  bottomTitles: AxisTitles(
-                                      sideTitles:
-                                          SideTitles(showTitles: false)),
-                                  topTitles: AxisTitles(
-                                      sideTitles:
-                                          SideTitles(showTitles: false)),
-                                  rightTitles: AxisTitles(
-                                      sideTitles: SideTitles(
-                                    showTitles: false,
+                                        touchTooltipData:
+                                            const LineTouchTooltipData(
+                                          tooltipBgColor:
+                                              Color.fromARGB(255, 36, 36, 36),
+                                          tooltipRoundedRadius: 10.0,
+                                          showOnTopOfTheChartBoxArea: true,
+                                          fitInsideHorizontally: true,
+                                          tooltipMargin: 0,
+                                        ),
+                                        getTouchedSpotIndicator:
+                                            (LineChartBarData barData,
+                                                List<int> indicators) {
+                                          return indicators.map(
+                                            (int index) {
+                                              const line = FlLine(
+                                                  color: Color.fromARGB(
+                                                      255, 145, 145, 145),
+                                                  strokeWidth: 1,
+                                                  dashArray: [2, 4]);
+                                              return const TouchedSpotIndicatorData(
+                                                line,
+                                                FlDotData(show: false),
+                                              );
+                                            },
+                                          ).toList();
+                                        },
+                                        getTouchLineEnd: (_, __) =>
+                                            double.infinity),
                                   )),
-                                ),
-                              )),
+                            ),
+                            const SizedBox(
+                              height: 25,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 30),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        selectedcategory = 10;
+                                        points = [];
+                                        avg = [];
+                                        grapgloading = true;
+                                      });
+                                      mapdatapoints();
+                                    },
+                                    child: AnimatedContainer(
+                                      padding: const EdgeInsets.all(5),
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      decoration: BoxDecoration(
+                                          color: selectedcategory == 10
+                                              ? Colors.black
+                                              : Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          border: Border.all()),
+                                      child: Text(
+                                        "Top 10",
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: selectedcategory == 10
+                                                ? Colors.white
+                                                : Colors.black),
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        selectedcategory = 50;
+                                        points = [];
+                                        avg = [];
+                                        grapgloading = true;
+                                      });
+                                      mapdatapoints();
+                                    },
+                                    child: AnimatedContainer(
+                                      padding: const EdgeInsets.all(5),
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      decoration: BoxDecoration(
+                                          color: selectedcategory == 50
+                                              ? Colors.black
+                                              : Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          border: Border.all()),
+                                      child: Text(
+                                        "Top 50",
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: selectedcategory == 50
+                                                ? Colors.white
+                                                : Colors.black),
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        selectedcategory = 100;
+                                        points = [];
+                                        avg = [];
+                                        grapgloading = true;
+                                      });
+                                      mapdatapoints();
+                                    },
+                                    child: AnimatedContainer(
+                                      padding: const EdgeInsets.all(5),
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      decoration: BoxDecoration(
+                                          color: selectedcategory == 100
+                                              ? Colors.black
+                                              : Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          border: Border.all()),
+                                      child: Text(
+                                        "Top 100",
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: selectedcategory == 100
+                                                ? Colors.white
+                                                : Colors.black),
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        selectedcategory = 150;
+                                        points = [];
+                                        avg = [];
+                                        grapgloading = true;
+                                      });
+                                      mapdatapoints();
+                                    },
+                                    child: AnimatedContainer(
+                                      padding: const EdgeInsets.all(5),
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      decoration: BoxDecoration(
+                                          color: selectedcategory == 150
+                                              ? Colors.black
+                                              : Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          border: Border.all()),
+                                      child: Text(
+                                        "All Students",
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: selectedcategory == 150
+                                                ? Colors.white
+                                                : Colors.black),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
                         ),
                 ),
               ],
             ),
           ),
           const SizedBox(
-            height: 20,
+            height: 10,
           ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -351,24 +430,73 @@ class _SemState extends State<Sem> {
                           )
                         ],
                       ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      Text(
-                        "Avg at:  $avgcgpa",
-                        style: const TextStyle(
-                            color: Color.fromARGB(214, 255, 255, 255),
-                            fontSize: 12),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        "You at:  ${currstudentcgpa.toString()}",
-                        style: const TextStyle(
-                            color: Color.fromARGB(214, 255, 255, 255),
-                            fontSize: 12),
-                      ),
+                      grapgloading
+                          ? Center(
+                              child: Container(
+                                padding: const EdgeInsets.only(top: 20),
+                                height: 60,
+                                width: 60,
+                                child: Lottie.asset("Assets/graphloading.json"),
+                              ),
+                            )
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Text(
+                                  "Avg at:  $avgcgpa",
+                                  style: const TextStyle(
+                                      color: Color.fromARGB(214, 255, 255, 255),
+                                      fontSize: 12),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  "You at:  ${currstudentcgpa.toString()}",
+                                  style: const TextStyle(
+                                      color: Color.fromARGB(214, 255, 255, 255),
+                                      fontSize: 12),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text(
+                                      "Your Ranking:",
+                                      style: TextStyle(
+                                          color: Color.fromARGB(
+                                              214, 255, 255, 255),
+                                          fontSize: 12),
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      decoration: BoxDecoration(
+                                          color: Colors.pink[100],
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            "$studentrank th",
+                                            style: const TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
                     ],
                   ),
                 ),
@@ -446,6 +574,5 @@ class _SemState extends State<Sem> {
         ],
       ),
     );
-    ;
   }
 }

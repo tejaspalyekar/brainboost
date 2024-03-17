@@ -5,9 +5,9 @@ import 'package:http/http.dart' as http;
 
 class SemMarksService {
   Future<SemMarksModel> getcurrsemmarks(String email, String sem) async {
-    String url = 'http://127.0.0.1:8000/analysis/';
+    String url = 'https://main-project-render.onrender.com/analysis/';
     Uri uri = Uri.parse(url);
-    final body = {"email": "kotashashank-cmpn@atharvacoe.ac.in", "sem": "sem7"};
+    final body = {"email": email, "sem": sem};
     late final response;
     try {
       response = await http.post(uri, body: jsonEncode(body), headers: {
@@ -18,8 +18,8 @@ class SemMarksService {
     }
 
     if (response.statusCode == 200) {
-      return SemMarksModel.fromjson(
-          jsonDecode(response.body), "kotashashank-cmpn@atharvacoe.ac.in");
+      print("completed");
+      return SemMarksModel.fromjson(jsonDecode(response.body), email);
     } else {
       throw Exception('unable to get current sem data');
     }

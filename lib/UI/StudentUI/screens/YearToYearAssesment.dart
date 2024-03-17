@@ -1,5 +1,5 @@
 // ignore_for_file: avoid_unnecessary_containers
-
+import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/components/border/gf_border.dart';
 import 'package:getwidget/getwidget.dart';
@@ -15,6 +15,27 @@ class YearToYear extends StatefulWidget {
 
 class _YearToYearState extends State<YearToYear> {
   PageController _pcontroller = PageController();
+  late List<_ChartData> data;
+  late TooltipBehavior _tooltip;
+
+  @override
+  void initState() {
+    data = [
+      _ChartData('Sem1', 9),
+      _ChartData('Sem2', 8),
+      _ChartData('Sem3', 7.5),
+      _ChartData('Sem4', 6),
+      _ChartData('Sem5', 8.5),
+      _ChartData(
+        'Sem6',
+        9,
+      ),
+      _ChartData('Sem7', 6.9)
+    ];
+    _tooltip = TooltipBehavior(enable: true);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -41,35 +62,59 @@ class _YearToYearState extends State<YearToYear> {
           const SizedBox(
             height: 20,
           ),
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Container(
-              height: 210,
+          Container(
+              height: 250,
+              margin: EdgeInsets.symmetric(horizontal: 15),
+              padding: const EdgeInsets.all(10),
               width: double.infinity,
               decoration: const BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage("Assets/yty.png"), fit: BoxFit.cover),
+                color: Colors.white,
+                boxShadow: [BoxShadow(color: Colors.black, blurRadius: 2)],
                 borderRadius: BorderRadius.all(
                   Radius.circular(20),
                 ),
               ),
-            ),
-          ),
-          const SizedBox(height: 40),
+              child: SfCartesianChart(
+                  primaryXAxis: const CategoryAxis(
+                    minimum: 0,
+                  ),
+                  primaryYAxis:
+                      const NumericAxis(minimum: 5, maximum: 10, interval: 1),
+                  tooltipBehavior: _tooltip,
+                  series: <CartesianSeries<_ChartData, String>>[
+                    AreaSeries<_ChartData, String>(
+                      
+                      dataSource: data,
+                      xValueMapper: (_ChartData data, _) => data.x,
+                      yValueMapper: (_ChartData data, _) => data.y,
+                      name: 'Performance',
+                      borderGradient: const LinearGradient(colors: [
+                        Color.fromARGB(255, 255, 191, 0),
+                        Color.fromARGB(255, 255, 196, 19),
+                      ]),
+                      gradient: const LinearGradient(colors: [
+                        Color.fromARGB(255, 255, 220, 114),
+                        Color.fromARGB(255, 255, 227, 144),
+                        Color.fromARGB(198, 255, 235, 174),
+                        Color.fromARGB(198, 255, 241, 198)
+                      ]),
+                    )
+                  ])),
+          const SizedBox(height: 20),
           SmoothPageIndicator(
-            onDotClicked: (index) {
-              _pcontroller.animateToPage(index,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeIn);
-            },
-            controller: _pcontroller,
-            count: 3,
-            effect: const ScaleEffect(
-              activeStrokeWidth: 0.1,
-                dotWidth: 13,
-                dotHeight: 13,
-                activeDotColor: Colors.black,
-                dotColor: Color.fromARGB(255, 156, 156, 156))),
+              onDotClicked: (index) {
+                _pcontroller.animateToPage(index,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeIn);
+              },
+              controller: _pcontroller,
+              count: 3,
+              effect: const ScaleEffect(
+                  activeStrokeWidth: 0.1,
+                  dotWidth: 8,
+                  dotHeight: 8,
+                  activeDotColor: Colors.black,
+                  dotColor: Color.fromARGB(255, 156, 156, 156))),
           const SizedBox(
             height: 20,
           ),
@@ -89,12 +134,12 @@ class _YearToYearState extends State<YearToYear> {
                       child: const Text("Weak Subject 1"),
                     ),
                   ),
-                   Center(
+                  Center(
                     child: Container(
                       child: const Text("Weak Subject 2"),
                     ),
                   ),
-                   Center(
+                  Center(
                     child: Container(
                       child: const Text("Weak Subject 3"),
                     ),
@@ -107,4 +152,11 @@ class _YearToYearState extends State<YearToYear> {
       ),
     );
   }
+}
+
+class _ChartData {
+  _ChartData(this.x, this.y);
+
+  final String x;
+  final double y;
 }

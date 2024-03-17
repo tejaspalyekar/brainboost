@@ -29,7 +29,7 @@ class _MainBodyState extends State<MainBody> {
     return Column(
       children: [
         SizedBox(
-          height: 540,
+          height: MediaQuery.of(context).size.height - 300,
           child: PageView(
             controller: _controller,
             children: [
@@ -51,8 +51,8 @@ class _MainBodyState extends State<MainBody> {
             count: 2,
             effect: const ScaleEffect(
                 activeStrokeWidth: 0.1,
-                dotWidth: 13,
-                dotHeight: 13,
+                dotWidth: 8,
+                dotHeight: 8,
                 activeDotColor: Colors.black,
                 dotColor: Color.fromARGB(255, 156, 156, 156)))
       ],

@@ -96,7 +96,7 @@ class _MyWidgetState extends State<Dashboard> {
               Container(
                 color: Colors.black,
                 width: double.infinity,
-                height: 210,
+                height: 250,
                 child: DrawerHeader(
                   decoration: const UnderlineTabIndicator(
                       borderSide:
@@ -302,7 +302,7 @@ class _MyWidgetState extends State<Dashboard> {
             },
           ),
           elevation: 0,
-          toolbarHeight: 80,
+          toolbarHeight: 70,
           title: Padding(
             padding: const EdgeInsets.only(left: 30),
             child: Text(
