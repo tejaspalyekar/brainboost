@@ -21,7 +21,7 @@ class _SemState extends State<Sem> {
   static final auth = FirebaseAuth.instance;
   bool grapgloading = true;
 
-  int selectedcategory = 50;
+  int selectedcategory = 150;
   int len = 50;
   late int studentrank;
   List<FlSpot> points = [
@@ -101,7 +101,7 @@ class _SemState extends State<Sem> {
       avg.add(FlSpot(i + 1, mybloc.state.avg));
 
       points.add(FlSpot(i.toDouble() + 1, mybloc.state.StudentsData[i][1]));
-
+      print("hello");
       if (mybloc.state.StudentsData[i][0] == auth.currentUser!.email) {
         yourperformance = FlSpot(i + 1, mybloc.state.StudentsData[i][1]);
 
@@ -186,8 +186,10 @@ class _SemState extends State<Sem> {
                                       maxY: 10,
                                       maxX: len.toDouble(),
                                       minY: 6,
+                                      
                                       lineBarsData: [
                                         LineChartBarData(
+
                                             dotData:
                                                 const FlDotData(show: false),
                                             color: const Color.fromARGB(

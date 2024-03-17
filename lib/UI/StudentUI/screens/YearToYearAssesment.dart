@@ -91,9 +91,9 @@ class _YearToYearState extends State<YearToYear> {
                       tooltipBehavior: _tooltip,
                       enableAxisAnimation: true,
                       enableMultiSelection: true,
-                      
                       series: <CartesianSeries<_ChartData, String>>[
                           AreaSeries<_ChartData, String>(
+                            
                             dataSource: data,
                             xValueMapper: (_ChartData data, _) => data.x,
                             yValueMapper: (_ChartData data, _) => data.y,
@@ -108,7 +108,7 @@ class _YearToYearState extends State<YearToYear> {
                               Color.fromARGB(198, 255, 235, 174),
                               Color.fromARGB(198, 255, 241, 198)
                             ]),
-                          )
+                          ),
                         ])),
           const SizedBox(height: 20),
           SmoothPageIndicator(
