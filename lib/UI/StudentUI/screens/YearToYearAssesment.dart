@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:lottie/lottie.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:flutter/material.dart';
-import 'package:getwidget/components/border/gf_border.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -20,6 +19,10 @@ class _YearToYearState extends State<YearToYear> {
   PageController _pcontroller = PageController();
   late List<_ChartData> data = [];
   late TooltipBehavior _tooltip;
+  String lowestscoredsem = "";
+  double lowestcgpa = 0;
+  String highestscoredsem = "";
+  double highestcgpa = 0;
   SemMarksService Semmarksservice = SemMarksService();
   static final auth = FirebaseAuth.instance;
   List semlist = ['sem1', 'sem2', 'sem3', 'sem4', 'sem5', 'sem6', 'sem7'];
@@ -32,13 +35,31 @@ class _YearToYearState extends State<YearToYear> {
   }
 
   fetchallsemdata() async {
-    for (int i = 0; i < 7; i++) {
+    String lowestsem = "";
+    double lowcgpa = 11;
+    String highsem = "";
+    double highcgpa = 0;
+    for (int i = 0; i < semlist.length; i++) {
       final marksmodel = await Semmarksservice.getcurrsemmarks(
           auth.currentUser!.email!, semlist[i]);
       data.add(_ChartData(semlist[i], marksmodel.currentstudentcgpa));
+      if (marksmodel.currentstudentcgpa < lowcgpa) {
+        lowcgpa = marksmodel.currentstudentcgpa;
+        lowestsem = semlist[i];
+      }
+      if (marksmodel.currentstudentcgpa > highcgpa) {
+        highcgpa = marksmodel.currentstudentcgpa;
+        highsem = semlist[i];
+      }
     }
+    print(lowcgpa);
+    print(highcgpa);
     setState(() {
       loading = false;
+      highestcgpa = highcgpa;
+      lowestcgpa = lowcgpa;
+      highestscoredsem = highsem;
+      lowestscoredsem = lowestsem;
     });
   }
 
@@ -70,7 +91,7 @@ class _YearToYearState extends State<YearToYear> {
           ),
           Container(
               height: 250,
-              margin: EdgeInsets.symmetric(horizontal: 15),
+              margin: const EdgeInsets.symmetric(horizontal: 15),
               padding: const EdgeInsets.all(10),
               width: double.infinity,
               decoration: const BoxDecoration(
@@ -93,7 +114,6 @@ class _YearToYearState extends State<YearToYear> {
                       enableMultiSelection: true,
                       series: <CartesianSeries<_ChartData, String>>[
                           AreaSeries<_ChartData, String>(
-                            
                             dataSource: data,
                             xValueMapper: (_ChartData data, _) => data.x,
                             yValueMapper: (_ChartData data, _) => data.y,
@@ -110,7 +130,7 @@ class _YearToYearState extends State<YearToYear> {
                             ]),
                           ),
                         ])),
-          const SizedBox(height: 20),
+          /* const SizedBox(height: 20),
           SmoothPageIndicator(
               onDotClicked: (index) {
                 _pcontroller.animateToPage(index,
@@ -118,45 +138,122 @@ class _YearToYearState extends State<YearToYear> {
                     curve: Curves.easeIn);
               },
               controller: _pcontroller,
-              count: 3,
+              count: 2,
               effect: const ScaleEffect(
                   activeStrokeWidth: 0.1,
                   dotWidth: 8,
                   dotHeight: 8,
                   activeDotColor: Colors.black,
-                  dotColor: Color.fromARGB(255, 156, 156, 156))),
+                  dotColor: Color.fromARGB(255, 156, 156, 156))), */
           const SizedBox(
-            height: 20,
+            height: 30,
           ),
           Container(
             margin: const EdgeInsets.only(left: 20, right: 20),
             height: 200,
             width: double.infinity,
             child: GFBorder(
-              radius: const Radius.circular(20),
-              type: GFBorderType.rRect,
-              dashedLine: const [10, 8],
-              child: PageView(
-                controller: _pcontroller,
-                children: [
-                  Center(
-                    child: Container(
-                      child: const Text("Weak Subject 1"),
+                radius: const Radius.circular(20),
+                type: GFBorderType.rRect,
+                dashedLine: const [10, 8],
+                child: Column(
+                  children: [
+                    Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Lottie.asset(
+                                  repeat: false,
+                                  'Assets/increment.json',
+                                  fit: BoxFit.cover,
+                                  width: 50,
+                                  height: 50),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              const Text(
+                                "Highest Scored Semester:",
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w700),
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "$highestscoredsem ",
+                                  style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                Text(
+                                  '${highestcgpa.toString()} CGPA',
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                  Center(
-                    child: Container(
-                      child: const Text("Weak Subject 2"),
+                    const Divider(
+                      color: Colors.grey,
+                      thickness: 1,
                     ),
-                  ),
-                  Center(
-                    child: Container(
-                      child: const Text("Weak Subject 3"),
+                    Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Lottie.asset(
+                                  repeat: false,
+                                  'Assets/decrement.json',
+                                  fit: BoxFit.cover,
+                                  width: 50,
+                                  height: 50),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              const Text(
+                                "Lowest Scored Semester:",
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w700),
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  " $lowestscoredsem",
+                                  style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                Text(
+                                  '${lowestcgpa.toString()} CGPA',
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  )
-                ],
-              ),
-            ),
+                  ],
+                )),
           ),
         ],
       ),

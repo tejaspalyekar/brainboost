@@ -1,7 +1,6 @@
 import 'package:brainboost/UI/StudentUI/screens/SWO.dart';
 import 'package:brainboost/UI/StudentUI/screens/Sem.dart';
 import 'package:flutter/material.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 // for Colorful Icons
 class MainBody extends StatefulWidget {
@@ -41,7 +40,7 @@ class _MainBodyState extends State<MainBody> {
         const SizedBox(
           height: 10,
         ),
-        SmoothPageIndicator(
+        /* SmoothPageIndicator(
             onDotClicked: (index) {
               _controller.animateToPage(index,
                   duration: const Duration(milliseconds: 300),
@@ -54,7 +53,7 @@ class _MainBodyState extends State<MainBody> {
                 dotWidth: 8,
                 dotHeight: 8,
                 activeDotColor: Colors.black,
-                dotColor: Color.fromARGB(255, 156, 156, 156)))
+                dotColor: Color.fromARGB(255, 156, 156, 156))) */
       ],
     );
   }

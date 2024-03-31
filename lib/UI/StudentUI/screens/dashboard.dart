@@ -301,6 +301,15 @@ class _MyWidgetState extends State<Dashboard> {
               );
             },
           ),
+          actions: const [
+            Padding(
+              padding: EdgeInsets.only(right: 10),
+              child: Icon(
+                Icons.more_horiz_outlined,
+                color: Colors.black,
+              ),
+            )
+          ],
           elevation: 0,
           toolbarHeight: 70,
           title: Padding(
@@ -308,7 +317,7 @@ class _MyWidgetState extends State<Dashboard> {
             child: Text(
               title,
               style: GoogleFonts.openSans(
-                  fontSize: 27,
+                  fontSize: 22,
                   fontWeight: FontWeight.w600,
                   color: Colors.black),
             ),
