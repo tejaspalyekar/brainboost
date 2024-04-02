@@ -2,6 +2,7 @@ import 'package:brainboost/Services/placementoverview.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class PO extends StatefulWidget {
   const PO({super.key});
@@ -13,15 +14,38 @@ class PO extends StatefulWidget {
 class _YearToYearState extends State<PO> {
   PlacementService placementservice = PlacementService();
   bool loading = true;
+  late List<_actualpercentage> actualpercentagedata;
+  late List<_actualpercentage> predictedpercentagedata;
+  late TooltipBehavior _tooltip;
   @override
   void initState() {
     // TODO: implement initState
+    actualpercentagedata = [
+      /* _actualpercentage('2021-22', 68),
+      _actualpercentage('2022-23', 60),
+      _actualpercentage('2023-24', 91), */
+    ];
+    predictedpercentagedata = [
+      /* _actualpercentage('2021-22', 60),
+      _actualpercentage('2022-23', 70),
+      _actualpercentage('2023-24', 81), */
+    ];
+    _tooltip = TooltipBehavior(enable: true);
     super.initState();
     fetchplacementdata();
   }
 
   fetchplacementdata() async {
-    placementservice.getplacementdata();
+    final placementdatamodal = await placementservice.getplacementdata();
+    placementdatamodal.placementdata.forEach(
+      (key, value) {
+        actualpercentagedata.add(_actualpercentage(
+            key.toString().substring(11), value["actual_percentage"] ?? 0));
+        predictedpercentagedata.add(_actualpercentage(
+            key.toString().substring(11), value["predicted_percentage"]));
+        print(key);
+      },
+    );
     setState(() {
       loading = false;
     });
@@ -65,8 +89,38 @@ class _YearToYearState extends State<PO> {
                 Radius.circular(15),
               ),
             ),
-            child:loading? Lottie.asset('Assets/graphloading.json'):
-            ,
+            child: loading
+                ? Lottie.asset('Assets/graphloading.json')
+                : SfCartesianChart(
+                    primaryXAxis: CategoryAxis(),
+                    primaryYAxis:
+                        NumericAxis(minimum: 20, maximum: 100, interval: 20),
+                    tooltipBehavior: _tooltip,
+                    series: <CartesianSeries<_actualpercentage, String>>[
+                        ColumnSeries<_actualpercentage, String>(
+                          dataSource: actualpercentagedata,
+                          xValueMapper: (_actualpercentage data, _) => data.x,
+                          yValueMapper: (_actualpercentage data, _) => data.y,
+                          name: 'actual percentage',
+                          gradient: const LinearGradient(colors: [
+                            Color.fromARGB(255, 10, 98, 185),
+                            Color.fromARGB(255, 49, 139, 228),
+                            Color.fromARGB(255, 73, 159, 245)
+                          ]),
+                        ),
+                        ColumnSeries<_actualpercentage, String>(
+                          
+                          dataSource: predictedpercentagedata,
+                          xValueMapper: (_actualpercentage data, _) => data.x,
+                          yValueMapper: (_actualpercentage data, _) => data.y,
+                          name: 'predicted percentage',
+                          gradient: const LinearGradient(colors: [
+                            Color.fromARGB(255, 92, 10, 185),
+                            Color.fromARGB(255, 114, 32, 209),
+                            Color.fromARGB(255, 135, 51, 231),
+                          ]),
+                        ),
+                      ]),
           ),
           /* const SizedBox(height: 20),
           SmoothPageIndicator(
@@ -87,4 +141,11 @@ class _YearToYearState extends State<PO> {
       ),
     );
   }
+}
+
+class _actualpercentage {
+  _actualpercentage(this.x, this.y);
+
+  final String x;
+  final double y;
 }
