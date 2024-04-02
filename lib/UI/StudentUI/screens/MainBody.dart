@@ -33,7 +33,6 @@ class _MainBodyState extends State<MainBody> {
             controller: _controller,
             children: [
               Sem(currsem: currsem),
-              const Swo(),
             ],
           ),
         ),

@@ -133,6 +133,5 @@ class _SwoState extends State<Swo> {
         ],
       ),
     );
-    
   }
 }

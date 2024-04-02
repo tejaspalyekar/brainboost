@@ -1,5 +1,7 @@
+import 'package:brainboost/Services/placementoverview.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 
 class PO extends StatefulWidget {
   const PO({super.key});
@@ -9,6 +11,22 @@ class PO extends StatefulWidget {
 }
 
 class _YearToYearState extends State<PO> {
+  PlacementService placementservice = PlacementService();
+  bool loading = true;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchplacementdata();
+  }
+
+  fetchplacementdata() async {
+    placementservice.getplacementdata();
+    setState(() {
+      loading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -47,6 +65,8 @@ class _YearToYearState extends State<PO> {
                 Radius.circular(15),
               ),
             ),
+            child:loading? Lottie.asset('Assets/graphloading.json'):
+            ,
           ),
           /* const SizedBox(height: 20),
           SmoothPageIndicator(
