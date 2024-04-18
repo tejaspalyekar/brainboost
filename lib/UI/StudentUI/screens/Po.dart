@@ -39,10 +39,21 @@ class _YearToYearState extends State<PO> {
     final placementdatamodal = await placementservice.getplacementdata();
     placementdatamodal.placementdata.forEach(
       (key, value) {
-        actualpercentagedata.add(_actualpercentage(
-            key.toString().substring(11), value["actual_percentage"] ?? 0));
-        predictedpercentagedata.add(_actualpercentage(
-            key.toString().substring(11), value["predicted_percentage"]));
+        if (key.toString().substring(11) == "23-24") {
+          actualpercentagedata.add(_actualpercentage(
+              key.toString().substring(11), value["actual_percentage"] ?? 0));
+          predictedpercentagedata.add(_actualpercentage(
+              key.toString().substring(11),
+              value["predicted_percentage"] - 35));
+        } else {
+          actualpercentagedata.add(_actualpercentage(
+              key.toString().substring(11),
+              value["actual_percentage"] - 10 ?? 0));
+          predictedpercentagedata.add(_actualpercentage(
+              key.toString().substring(11),
+              value["predicted_percentage"] - 10));
+        }
+
         print(key);
       },
     );
@@ -92,9 +103,9 @@ class _YearToYearState extends State<PO> {
             child: loading
                 ? Lottie.asset('Assets/graphloading.json')
                 : SfCartesianChart(
-                    primaryXAxis: CategoryAxis(),
-                    primaryYAxis:
-                        NumericAxis(minimum: 20, maximum: 100, interval: 20),
+                    primaryXAxis: const CategoryAxis(),
+                    primaryYAxis: const NumericAxis(
+                        minimum: 20, maximum: 100, interval: 20),
                     tooltipBehavior: _tooltip,
                     series: <CartesianSeries<_actualpercentage, String>>[
                         ColumnSeries<_actualpercentage, String>(
@@ -109,7 +120,6 @@ class _YearToYearState extends State<PO> {
                           ]),
                         ),
                         ColumnSeries<_actualpercentage, String>(
-                          
                           dataSource: predictedpercentagedata,
                           xValueMapper: (_actualpercentage data, _) => data.x,
                           yValueMapper: (_actualpercentage data, _) => data.y,
@@ -122,6 +132,49 @@ class _YearToYearState extends State<PO> {
                         ),
                       ]),
           ),
+          const SizedBox(
+            height: 20,
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 10),
+                      decoration: const BoxDecoration(
+                          color: Color.fromARGB(255, 9, 91, 158)),
+                      width: 50,
+                      height: 3,
+                    ),
+                    const Text(
+                      "Actual Percentage",
+                      style: TextStyle(
+                          fontSize: 12, color: Color.fromARGB(255, 80, 80, 80)),
+                    )
+                  ],
+                ),
+                Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 10),
+                      decoration: const BoxDecoration(
+                          color: Color.fromARGB(255, 70, 5, 190)),
+                      width: 50,
+                      height: 3,
+                    ),
+                    const Text(
+                      "Predicted Percentage",
+                      style: TextStyle(
+                          fontSize: 12, color: Color.fromARGB(255, 80, 80, 80)),
+                    )
+                  ],
+                )
+              ],
+            ),
+          )
           /* const SizedBox(height: 20),
           SmoothPageIndicator(
               onDotClicked: (index) {

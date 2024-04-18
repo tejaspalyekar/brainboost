@@ -1,4 +1,4 @@
-import 'package:brainboost/UI/StudentUI/widgets/notification.dart';
+
 import 'package:flutter/material.dart';
 
 class Notifications extends StatefulWidget {
@@ -11,10 +11,8 @@ class Notifications extends StatefulWidget {
 class _YearToYearState extends State<Notifications> {
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(itemBuilder: (context, index) {
-      return notificationcontainer();
-    },
-    
-    itemCount: 10,);
+    return const Center(
+      child: Text("No..Notifications Found..!!"),
+    );
   }
 }
